@@ -8,9 +8,8 @@ description = {
   license = "Apache 2.0"
 }
 dependencies = {
-  "lua >= 5.1"
+  "lua >= 5.1",
   "luacrypto >= 0.3"
-  -- If you depend on other rocks, add them here
 }
 build = {
   type = "builtin",
