@@ -1,4 +1,4 @@
-# Kong External OAUTH 2.0
+# Kong External OAUTH 2.0 (3rd Party OAUTH)
 
 A Kong plugin, that let you use an external Oauth 2.0 provider to protect your API.
 
@@ -19,14 +19,12 @@ domain, so you can use the plugin also for thirty party services.
 
 ## Installation
 
-    $ luarocks install external-oauth
+    $ luarocks install 3rd-party-oauth
 
-To make Kong aware that it has to look for the new plugin, you'll have to add it to the custom_plugins
-property in your configuration file.
+To make Kong aware that it has to look for the new plugin, you'll have to add enable this plugin in your KONG config.
 
-```yaml
-custom_plugins:
-    - external-oauth
+```
+plugins = bundled,3rd-party-oauth
 ```
 
 Remember to restart Kong.
@@ -49,6 +47,7 @@ $ curl -X POST http://kong:8001/apis/{api}/plugins \
     --data "config.user_keys=email,name,sub"
     --data "config.hosted_domain=mycompany.com"
     --data "config.email_key=email"
+    --data "config.path_prefix=/path-prefix"
 ```
 
 | Form Parameter | default | description |
@@ -64,11 +63,15 @@ $ curl -X POST http://kong:8001/apis/{api}/plugins \
 | `config.hosted_domain`  | | domain whose users must belong to in order to get logged in. Ignored if empty |
 | `config.email_key` 		  | | key to be checked for hosted domain, taken from userinfo endpoint |
 | `config.user_info_periodic_check` 		  | 60 | time in seconds between token checks |
+| `config.path_prefix` 		  |  | prefix for path where this plugin listens to |
 
-In addition to the `user_keys` will be added a `X-OAUTH-TOKEN` header with the access token of the provider.
+In addition to the `user_keys` will be added a `X-OAUTH-TOKEN` header with the access token of the provider and `X-USERINFO` with decoded info from oauth provider.
 
 ## Author
 Niko Usai
+
+## Further tweaks done by
+Andrzej Karmazyn
 
 ## License
 
