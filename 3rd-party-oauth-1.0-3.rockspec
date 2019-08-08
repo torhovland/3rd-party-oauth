@@ -1,5 +1,5 @@
 package = "3rd-party-oauth"
-version = "1.0-2"
+version = "1.0-3"
 source = {
   url = "git://github.com/akarmazyn/3rd-party-oauth"
 }

@@ -24,7 +24,7 @@ local ngx = ngx
 local OAUTH_CALLBACK = "^%s/oauth2/callback(/?(\\?[^\\s]*)*)$"
 
 function _M.run(conf)
-    local callback_url = ngx.var.scheme .. "://" .. ngx.var.host ..  ":" .. ngx.var.server_port .. conf.path_prefix .. "/oauth2/callback"
+    local callback_url = kong.request.get_scheme() .. "://" .. kong.request.get_host() ..  ":" .. kong.request.get_port() .. conf.path_prefix .. "/oauth2/callback"
 
     -- check if we're calling the callback endpoint
     if ngx.re.match(ngx.var.request_uri, string.format(OAUTH_CALLBACK, conf.path_prefix)) then
