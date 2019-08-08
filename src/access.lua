@@ -24,7 +24,7 @@ local ngx = ngx
 local OAUTH_CALLBACK = "^%s/oauth2/callback(/?(\\?[^\\s]*)*)$"
 
 function _M.run(conf)
-    local callback_url = kong.request.get_scheme() .. "://" .. kong.request.get_host() ..  ":" .. kong.request.get_port() .. conf.path_prefix .. "/oauth2/callback"
+    local callback_url = get_callback_url(conf)
 
     -- check if we're calling the callback endpoint
     if ngx.re.match(ngx.var.request_uri, string.format(OAUTH_CALLBACK, conf.path_prefix)) then
@@ -125,7 +125,7 @@ function decode_token(token, conf)
 end
 
 -- Callback Handling
-function  handle_callback( conf, callback_url )
+function handle_callback( conf, callback_url )
     local args = ngx.req.get_uri_args()
 
     if args.code then
@@ -163,6 +163,24 @@ function  handle_callback( conf, callback_url )
         ngx.say("User has denied access to the resources.")
         ngx.exit(ngx.HTTP_UNAUTHORIZED)
     end
+end
+
+-- Builds a callback url taking into consideration any X-Forwarded headers
+function get_callback_url(conf)
+    local scheme = kong.request.get_forwarded_scheme();
+    if not scheme then
+        scheme = kong.request.get_scheme()
+    end
+    local host = kong.request.get_forwarded_host();
+    if not host then
+        host = kong.request.get_host()
+    end
+    local port = kong.request.get_forwarded_port();
+    if not port then
+        port = kong.request.get_port()
+    end
+
+    return scheme .. "://" .. host ..  ":" .. port .. conf.path_prefix .. "/oauth2/callback"
 end
 
 return _M
