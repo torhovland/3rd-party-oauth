@@ -33,10 +33,19 @@ function _M.run(conf)
         local encrypted_token = ngx.var.cookie_EOAuthToken
         -- check if we are authenticated already
 
+        if not encrypted_token then
+            -- check if token was passed in header
+            local headers = kong.request.get_headers()
+            if headers.EOAuthToken then
+                encrypted_token = headers.EOAuthToken
+            end
+        end
+
         kong.service.request.set_header('Content-Type', 'application/json')
         kong.service.request.set_header('X-Requested-With', 'XMLHttpRequest')
         if encrypted_token then
             ngx.header["Set-Cookie"] = "EOAuthToken=" .. encrypted_token .. "; path=/;Max-Age=3000;HttpOnly"
+            kong.service.request.set_header('EOAuthToken', encrypted_token)
 
             local access_token = decode_token(encrypted_token, conf)
             if not access_token then
