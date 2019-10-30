@@ -41,8 +41,6 @@ function _M.run(conf)
             end
         end
 
-        kong.service.request.set_header('Content-Type', 'application/json')
-        kong.service.request.set_header('X-Requested-With', 'XMLHttpRequest')
         if encrypted_token then
             ngx.header["Set-Cookie"] = "EOAuthToken=" .. encrypted_token .. "; path=/;Max-Age=3000;HttpOnly"
             kong.service.request.set_header('EOAuthToken', encrypted_token)
