@@ -113,7 +113,7 @@ function redirect_to_auth( conf, callback_url )
     -- Track the endpoint they wanted access to so we can transparently redirect them back
     ngx.header["Set-Cookie"] = "EOAuthRedirectBack=" .. ngx.var.request_uri .. "; path=/;Max-Age=120"
     -- Redirect to the /oauth endpoint
-    local oauth_authorize = conf.authorize_url .. "?response_type=code&client_id=" .. conf.client_id .. "&redirect_uri=" .. callback_url .. "&scope=" .. conf.scope
+    local oauth_authorize = conf.authorize_url .. "?response_type=code&client_id=" .. conf.client_id .. "&redirect_uri=" .. callback_url .. "&scope=" .. conf.scope .. "&state=somerandomstate"
 
     return ngx.redirect(oauth_authorize)
 end
