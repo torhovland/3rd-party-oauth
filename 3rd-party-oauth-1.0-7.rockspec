@@ -1,7 +1,7 @@
 package = "3rd-party-oauth"
-version = "1.0-6"
+version = "1.0-7"
 source = {
-  url = "git://github.com/akarmazyn/3rd-party-oauth"
+  url = "https://github.com/torhovland/3rd-party-oauth"
 }
 description = {
   summary = "A Kong plugin, that let you use an external Oauth 2.0 provider to protect your API",
